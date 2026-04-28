@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent
+  labels:
+    app: qbittorrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbittorrent
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+    spec:
+      containers:
+        - name: qbittorrent
+          image: linuxserver/qbittorrent:latest
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Sao_Paulo"
+          ports:
+            - containerPort: 8080   # Web UI
+            - containerPort: 6881   # Torrent TCP
+            - containerPort: 6881   # Torrent UDP
+              protocol: UDP
+          volumeMounts:
+            - name: downloads
+              mountPath: /downloads
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: downloads
+          hostPath:
+            path: /DADOS
+            type: Directory
+        - name: config
+          hostPath:
+            path: /DADOS/qbittorrent-config
+            type: DirectoryOrCreate
