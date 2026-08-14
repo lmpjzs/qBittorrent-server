@@ -32,5 +32,6 @@ spec:
         persistentVolumeClaim:
           claimName: qbittorrent-config-pvc
       - name: data
-        persistentVolumeClaim:
-          claimName: media-data-pvc
+        hostPath:
+          path: /DADOS/TORRENT
+          type: DirectoryOrCreate
